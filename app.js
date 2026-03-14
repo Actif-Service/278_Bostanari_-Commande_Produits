@@ -40,7 +40,7 @@ const produits = [
   { nom: "Eau de javel 5 litres", image: "https://actif-service.github.io/Commande-Produits/images/Eau%20de%20javel%205%20litres.jpg" },
   { nom: "Vinaigre 1,5 litres", image: "https://actif-service.github.io/Commande-Produits/images/Vinaigre%201,5litres.jpg" },
   { nom: "Sac aspirateur Aero 8", image: "https://actif-service.github.io/Commande-Produits/images/sac%20aspirateur%20Aero%208.jpg" },
-  { nom: "Sac aspirateur Vento 8", image: "https://actif-service.github.io/Commande-Produits/images/sac%20aspirateur%20Vento%208.jpg" }
+  { nom: "Sac aspirateur Vento 8", image: "https://actif-service.github.io/Commande-Produits/images/sac%20aspirateur%20Vento%208.jpg" },
 ];
 
 const produitsContainer = document.getElementById("produits");
@@ -56,9 +56,9 @@ produits.forEach(p => {
     </div>
     <span>${p.nom}</span>
     <div class="quantite-container">
-      <button class="moins" type="button">-</button>
+      <button class="moins" type="button" aria-label="Diminuer quantité">-</button>
       <input type="number" min="0" value="0" class="quantite" data-nom="${p.nom}">
-      <button class="plus" type="button">+</button>
+      <button class="plus" type="button" aria-label="Augmenter quantité">+</button>
     </div>
   `;
 
@@ -109,10 +109,11 @@ document.getElementById("formCommande").addEventListener("submit", function(e) {
   const now = new Date();
   const dateStr = now.toLocaleString("fr-FR");
 
+  // 🔹 Texte commande HTML
   let texteCommande = `
   <div style="font-family:Arial,sans-serif; background-color:#f2f2f2; padding:15px;">
     <div style="text-align:center; margin-bottom:20px;">
-      <img src="https://actif-service.github.io/Commande-Produits/images/logo.png"
+      <img src="https://actif-service.github.io/Commande-Produits/images/logo.jpg"
            alt="Actif Service"
            width="180"
            style="display:block; margin:0 auto;">
@@ -122,16 +123,27 @@ document.getElementById("formCommande").addEventListener("submit", function(e) {
       Nouvelle commande produits
     </div>
 
-    <div style="background-color:#e6e6e6; padding:12px; margin-top:10px;">
-      <table style="width:100%;">
-        <tr>
-          <td>Société : ${societe}</td>
-          <td style="text-align:right;">Date : <strong>${dateStr}</strong></td>
-        </tr>
-      </table>
-      <p style="margin:4px 0;">Chantier : <strong>${chantier}</strong></p>
-      <p style="margin:4px 0;">Nom : ${nom}</p>
+    <!-- Ligne 1 : Société / Date -->
+    <table style="width:100%; background-color:#e6e6e6; margin-top:10px; border-collapse:collapse; font-family:Arial,sans-serif;">
+      <tr>
+        <td style="text-align:left; font-size:14px; padding:6px 10px;">
+          Société : ${societe}
+        </td>
+        <td style="text-align:right; font-size:14px; padding:6px 10px;">
+          Date : <strong>${dateStr}</strong>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Ligne 2 : Chantier en encadré -->
+    <div style="margin-top:8px; background:#d9eaff; border:1px solid #1976d2; border-radius:4px; padding:12px; font-size:20px; font-weight:bold; text-align:center;">
+      Chantier : ${chantier}
     </div>
+
+    <!-- Nom du demandeur -->
+    <p style="background:#e6e6e6; margin:4px 0; padding:6px 12px; font-size:14px;">
+      Nom : ${nom}
+    </p>
 
     <table style="width:100%; border-collapse:collapse; margin-top:15px;">
       <tr style="background-color:#1976d2; color:white;">
@@ -141,7 +153,6 @@ document.getElementById("formCommande").addEventListener("submit", function(e) {
   `;
 
   let index = 0;
-
   document.querySelectorAll(".quantite").forEach(input => {
     const qte = Number(input.value);
     if (qte > 0) {
@@ -150,7 +161,7 @@ document.getElementById("formCommande").addEventListener("submit", function(e) {
       texteCommande += `
         <tr style="background-color:${background};">
           <td style="padding:6px 10px; border:1px solid #ccc;">
-            ${input.dataset.nom}
+            ${escapeHTML(input.dataset.nom)}
           </td>
           <td style="padding:6px; border:1px solid #ccc; text-align:center;">
             ${qte}
@@ -185,4 +196,7 @@ document.getElementById("formCommande").addEventListener("submit", function(e) {
   }).catch(() => {
     alert("Erreur lors de l'envoi.");
   });
+
 });
+
+
