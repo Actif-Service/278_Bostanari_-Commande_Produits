@@ -1,3 +1,25 @@
+(function(){
+  emailjs.init("UIMYUuF1YijZh1DFI");
+})();
+
+function escapeHTML(str){
+  if(!str) return "";
+  return str.replace(/[&<>"']/g,function(m){
+    return({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
+  });
+}
+
+const chantiersBEClean=[
+{nom:"AKROPOLIS",adresse:"Luitberg, 25 1853 Strombeek-Bever"},
+{nom:"APOLLO 95-97",adresse:"Grotexinkellaan, 95-97 1853 Strombeek-Bever"},
+{nom:"ECTA",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
+{nom:"EPHA",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
+{nom:"ERS",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
+{nom:"GROENDAL",adresse:"Sint-Annalaan, 74 1800 Vilvoorde"},
+{nom:"STONE",adresse:"Steenstraat, 59 1800 Vilvoorde"},
+{nom:"BWT",adresse:"Leuvensesteenweg, 633 1930 Zaventem"}
+];
+
 // 🔹 Protection anti-injection HTML
 function escapeHTML(str) {
   return str.replace(/[&<>"']/g, function(m) {
