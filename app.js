@@ -10,31 +10,17 @@ function escapeHTML(str){
 }
 
 const chantiersBEClean=[
-{nom:"AKROPOLIS",adresse:"Luitberg, 25 1853 Strombeek-Bever"},
-{nom:"APOLLO 95-97",adresse:"Grotexinkellaan, 95-97 1853 Strombeek-Bever"},
-{nom:"ECTA",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
-{nom:"EPHA",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
-{nom:"ERS",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
-{nom:"GROENDAL",adresse:"Sint-Annalaan, 74 1800 Vilvoorde"},
-{nom:"STONE",adresse:"Steenstraat, 59 1800 Vilvoorde"},
-{nom:"BWT",adresse:"Leuvensesteenweg, 633 1930 Zaventem"}
+  {nom:"AKROPOLIS",adresse:"Luitberg, 25 1853 Strombeek-Bever"},
+  {nom:"APOLLO 95-97",adresse:"Grotexinkellaan, 95-97 1853 Strombeek-Bever"},
+  {nom:"ECTA",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
+  {nom:"EPHA",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
+  {nom:"ERS",adresse:"Rue de Trèves, 49-51 1040 Etterbeek"},
+  {nom:"GROENDAL",adresse:"Sint-Annalaan, 74 1800 Vilvoorde"},
+  {nom:"STONE",adresse:"Steenstraat, 59 1800 Vilvoorde"},
+  {nom:"BWT",adresse:"Leuvensesteenweg, 633 1930 Zaventem"}
 ];
 
-// 🔹 Protection anti-injection HTML
-function escapeHTML(str) {
-  return str.replace(/[&<>"']/g, function(m) {
-    return ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    })[m];
-  });
-}
-
-// 🔹 Produits avec images
-const produits = [
+const produits=[
   { nom: "Ajax citron", image: "https://actif-service.github.io/Commande-Produits/images/Ajax%20citron.jpg" },
   { nom: "Glass 2000 1 litre", image: "https://actif-service.github.io/Commande-Produits/images/Glass%202000%201%20litre.jpg" },
   { nom: "Sani-day 1 litre", image: "https://actif-service.github.io/Commande-Produits/images/Sani-day%201%20litre.jpg" },
@@ -65,160 +51,133 @@ const produits = [
   { nom: "Sac aspirateur Vento 8", image: "https://actif-service.github.io/Commande-Produits/images/sac%20aspirateur%20Vento%208.jpg" },
 ];
 
-const produitsContainer = document.getElementById("produits");
+document.addEventListener("DOMContentLoaded",()=>{
 
-// 🔹 Affichage produits
-produits.forEach(p => {
-  const div = document.createElement("div");
-  div.className = "produit";
+const chantierSelect=document.getElementById("chantier");
+const produitsContainer=document.getElementById("produits");
 
-  div.innerHTML = `
-    <div class="img-container">
-      <img src="${p.image}" alt="${p.nom}">
-    </div>
-    <span>${p.nom}</span>
-    <div class="quantite-container">
-      <button class="moins" type="button" aria-label="Diminuer quantité">-</button>
-      <input type="number" min="0" value="0" class="quantite" data-nom="${p.nom}">
-      <button class="plus" type="button" aria-label="Augmenter quantité">+</button>
-    </div>
+chantiersBEClean.forEach(c=>{
+  const option=document.createElement("option");
+  option.value=c.nom;
+  option.textContent=c.nom;
+  chantierSelect.appendChild(option);
+});
+
+produits.forEach(p=>{
+  const div=document.createElement("div");
+  div.className="produit";
+
+  div.innerHTML=`
+  <div class="img-container">
+  <img src="${p.image}" alt="${p.nom}">
+  </div>
+  <span>${p.nom}</span>
+
+  <div class="quantite-container">
+  <button type="button" class="moins">-</button>
+  <input type="number" min="0" value="0" class="quantite" data-nom="${p.nom}">
+  <button type="button" class="plus">+</button>
+  </div>
   `;
 
   produitsContainer.appendChild(div);
 
-  const input = div.querySelector(".quantite");
+  const input=div.querySelector(".quantite");
 
-  div.querySelector(".plus").addEventListener("click", () => {
-    input.value = (parseInt(input.value) || 0) + 1;
+  div.querySelector(".plus").addEventListener("click",()=>{
+    input.value=(parseInt(input.value)||0)+1;
   });
 
-  div.querySelector(".moins").addEventListener("click", () => {
-    input.value = Math.max(0, (parseInt(input.value) || 0) - 1);
+  div.querySelector(".moins").addEventListener("click",()=>{
+    input.value=Math.max(0,(parseInt(input.value)||0)-1);
   });
+
 });
 
-// 🔹 Zone autre demande
-const autreDiv = document.createElement("div");
-autreDiv.className = "form-group";
-autreDiv.innerHTML = `
-  <label for="autre">Besoin d'autre chose :</label>
-  <textarea id="autre" placeholder="Ajoutez un produit ou commentaire"></textarea>
+document.getElementById("formCommande").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const societe="Bostanari Marianna";
+const chantier=escapeHTML(document.getElementById("chantier").value);
+const nom=escapeHTML(document.getElementById("nom").value);
+const autre=escapeHTML(document.getElementById("autre").value);
+
+const maintenant=new Date();
+const date=maintenant.toLocaleDateString("fr-BE");
+const heure=maintenant.toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"});
+
+let tableau=`<table style="width:100%;border-collapse:collapse;font-family:Arial;font-size:14px">
+<thead>
+<tr style="background:#1976d2;color:white">
+<th style="border:1px solid #ccc;padding:10px;text-align:left">Produit</th>
+<th style="border:1px solid #ccc;padding:10px;text-align:center;width:80px">Qté</th>
+</tr>
+</thead>
+<tbody>
 `;
-produitsContainer.appendChild(autreDiv);
 
-// 🔹 Envoi EmailJS
-document.getElementById("formCommande").addEventListener("submit", function(e) {
-  e.preventDefault();
+let ligne=0;
 
-  const societe = escapeHTML(document.getElementById("societe").value.trim());
-  const chantier = escapeHTML(document.getElementById("chantier").value.trim());
-  const nom = escapeHTML(document.getElementById("nom").value.trim());
-  const autre = escapeHTML(document.getElementById("autre").value.trim());
-
-  if (!societe || !chantier || !nom) {
-    return alert("Veuillez remplir Société, Chantier et Votre nom");
-  }
-
-  let hasCommande = false;
-  document.querySelectorAll(".quantite").forEach(input => {
-    if (Number(input.value) > 0) hasCommande = true;
-  });
-
-  if (!hasCommande && !autre) {
-    return alert("Veuillez sélectionner au moins un produit ou ajouter une demande.");
-  }
-
-  const now = new Date();
-  const dateStr = now.toLocaleString("fr-FR");
-
-  // 🔹 Texte commande HTML
-  let texteCommande = `
-  <div style="font-family:Arial,sans-serif; background-color:#f2f2f2; padding:15px;">
-    <div style="text-align:center; margin-bottom:20px;">
-      <img src="https://actif-service.github.io/Commande-Produits/images/logo.jpg"
-           alt="Actif Service"
-           width="180"
-           style="display:block; margin:0 auto;">
-    </div>
-
-    <div style="background-color:#1976d2; color:white; padding:12px; text-align:center; font-size:20px; font-weight:bold;">
-      Nouvelle commande produits
-    </div>
-
-    <!-- Ligne 1 : Société / Date -->
-    <table style="width:100%; background-color:#e6e6e6; margin-top:10px; border-collapse:collapse; font-family:Arial,sans-serif;">
-      <tr>
-        <td style="text-align:left; font-size:14px; padding:6px 10px;">
-          Société : ${societe}
-        </td>
-        <td style="text-align:right; font-size:14px; padding:6px 10px;">
-          Date : <strong>${dateStr}</strong>
-        </td>
-      </tr>
-    </table>
-
-    <!-- Ligne 2 : Chantier en encadré -->
-    <div style="margin-top:8px; background:#d9eaff; border:1px solid #1976d2; border-radius:4px; padding:12px; font-size:20px; font-weight:bold; text-align:center;">
-      Chantier : ${chantier}
-    </div>
-
-    <!-- Nom du demandeur -->
-    <p style="background:#e6e6e6; margin:4px 0; padding:6px 12px; font-size:14px;">
-      Nom : ${nom}
-    </p>
-
-    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
-      <tr style="background-color:#1976d2; color:white;">
-        <th style="padding:6px; border:1px solid #ccc; text-align:left;">Produit</th>
-        <th style="padding:6px; border:1px solid #ccc; text-align:center;">Quantité</th>
-      </tr>
-  `;
-
-  let index = 0;
-  document.querySelectorAll(".quantite").forEach(input => {
-    const qte = Number(input.value);
-    if (qte > 0) {
-      const background = index % 2 === 0 ? "#ffffff" : "#bbdefb";
-
-      texteCommande += `
-        <tr style="background-color:${background};">
-          <td style="padding:6px 10px; border:1px solid #ccc;">
-            ${escapeHTML(input.dataset.nom)}
-          </td>
-          <td style="padding:6px; border:1px solid #ccc; text-align:center;">
-            ${qte}
-          </td>
-        </tr>
-      `;
-      index++;
-    }
-  });
-
-  if (autre) {
-    texteCommande += `
-      <tr>
-        <td colspan="2" style="padding:8px; border:1px solid #ccc; background:#fff8e1;">
-          <strong>Autre demande :</strong> ${autre}
-        </td>
-      </tr>
+document.querySelectorAll(".quantite").forEach(input=>{
+  if(Number(input.value)>0){
+    ligne++;
+    const couleur=ligne%2===0?"#bbdefb":"#ffffff";
+    tableau+=`
+    <tr style="background:${couleur}">
+    <td style="border:1px solid #ccc;padding:10px">${escapeHTML(input.dataset.nom)}</td>
+    <td style="border:1px solid #ccc;padding:10px;text-align:center;width:80px">${input.value}</td>
+    </tr>
     `;
   }
+});
 
-  texteCommande += "</table></div>";
+tableau+=`</tbody></table>`;
 
-  emailjs.send("service_kt6gmbs", "template_53rynh4", {
-    societe,
-    chantier,
-    nom,
-    commande: texteCommande
-  }).then(() => {
-    alert("Commande envoyée avec succès !");
-    document.getElementById("formCommande").reset();
-    document.querySelectorAll(".quantite").forEach(input => input.value = 0);
-  }).catch(() => {
-    alert("Erreur lors de l'envoi.");
-  });
+const messageHTML=`
+<div style="font-family:Arial">
+<table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+<tr>
+<td style="width:33%;text-align:left">
+<b>Société :</b> ${societe}<br>
+<b>Technicien :</b> ${nom}
+</td>
+<td style="width:33%;text-align:center">
+<div style="
+border:2px solid #4CAF50;
+border-radius:8px;
+padding:12px;
+background:#f7fff7;
+">
+<div style="font-size:14px;color:#666">CHANTIER</div>
+<div style="font-size:22px;font-weight:bold">
+${chantier}
+</div>
+</div>
+</td>
+<td style="width:33%;text-align:right">
+${date}<br>${heure}
+</td>
+</tr>
+</table>
+
+${tableau}
+
+${autre?`<p><b>Autre demande :</b><br>${autre}</p>`:""}
+</div>
+`;
+
+emailjs.send("service_kt6gmbs","template_53rynh4",{
+societe,
+chantier,
+nom,
+commande:messageHTML
+}).then(()=>{
+  alert("Commande envoyée !");
+  document.getElementById("formCommande").reset();
+  document.querySelectorAll(".quantite").forEach(i=>i.value=0);
+});
 
 });
 
-
+});
