@@ -142,8 +142,12 @@ document.addEventListener("DOMContentLoaded",()=>{
                 background:#f7fff7;
               ">
                 <div style="font-size:14px;color:#666">CHANTIER</div>
-                <div style="font-size:22px;font-weight:bold">${chantier}</div>
-              </div>
+<div style="font-size:18px;font-weight:bold;color:#000">
+${chantier}
+</div>
+<div style="font-size:14px;color:#666;margin-top:4px">
+${chantiersBEClean.find(c=>c.nom===chantier)?.adresse || ""}
+</div>
             </td>
             <td style="width:33%;text-align:right">
               ${date}<br>${heure}
