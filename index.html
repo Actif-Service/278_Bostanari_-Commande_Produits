@@ -1,96 +1,58 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Commande de produits</title>
-  <link rel="stylesheet" href="style.css">
 
-  <style>
-    /* 🔹 Optimisation mobile bouton */
-    #envoyerCommande {
-      width: 100%;
-      padding: 16px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: #1976d2;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
+<meta charset="UTF-8">
+<title>Commande de produits - Bostanari Marianna</title>
 
-    #envoyerCommande:active {
-      opacity: 0.8;
-    }
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-    @media (max-width: 768px) {
-      #envoyerCommande {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        border-radius: 0;
-        z-index: 1000;
-      }
+<link rel="stylesheet" href="style.css">
 
-      body {
-        padding-bottom: 90px;
-      }
-    }
-  </style>
 </head>
 
 <body>
 
-  <!-- Logo -->
-  <div class="logo-container">
-    <img src="images/logo.jpg" alt="Logo Actif Service" class="logo">
-  </div>
+<!-- Logo -->
+<div class="logo-container">
+  <img src="images/logo.jpg" alt="Logo Bostanari Marianna" class="logo">
+</div>
 
-  <h1>Commande de produits</h1>
+<h1>Commande de produits</h1>
 
-  <!-- FORMULAIRE COMPLET -->
-  <form id="formCommande">
+<form id="formCommande">
 
-    <div class="form-group">
-      <label for="societe">Nom de la société :</label>
-      <input type="text" id="societe" name="societe" placeholder="Votre société" required>
-    </div>
+<div class="ligne-formulaire">
 
-    <div class="form-group">
-      <label for="chantier">Chantier :</label>
-      <input type="text" id="chantier" name="chantier" placeholder="Nom du chantier" required>
-    </div>
+<div class="form-group">
+<label>Société</label>
+<input type="text" value="Bostanari Marianna" readonly>
+</div>
 
-    <div class="form-group">
-      <label for="nom">Votre nom :</label>
-      <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
-    </div>
+<div class="form-group">
+<label>Chantier</label>
+<select id="chantier" required>
+<option value="">-- Sélectionner --</option>
+</select>
+</div>
 
-    <!-- Produits générés par app.js -->
-    <div id="produits"></div>
+<div class="form-group">
+<label>Votre nom</label>
+<input type="text" id="nom" required>
+</div>
 
-    <!-- Champ caché -->
-    <input type="hidden" name="commande" id="commandeHidden">
+</div>
 
-    <button type="submit" id="envoyerCommande">
-      Envoyer la commande
-    </button>
+<div id="produits"></div>
 
-  </form>
+<div class="form-group">
+<label>Autre demande</label>
+<textarea id="autre"></textarea>
+</div>
 
-  <!-- EMAILJS -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js" defer></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      emailjs.init("UIMYUuF1YijZh1DFI");
-    });
-  </script>
+<button type="submit">Envoyer la commande</button>
 
-  <!-- APP -->
-  <script src="app.js" defer></script>
+<script src="app.js"></script>
 
 </body>
-
 </html>
