@@ -53,131 +53,127 @@ const produits=[
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-const chantierSelect=document.getElementById("chantier");
-const produitsContainer=document.getElementById("produits");
+  const chantierSelect=document.getElementById("chantier");
+  const produitsContainer=document.getElementById("produits");
 
-chantiersBEClean.forEach(c=>{
-  const option=document.createElement("option");
-  option.value=c.nom;
-  option.textContent=c.nom;
-  chantierSelect.appendChild(option);
-});
-
-produits.forEach(p=>{
-  const div=document.createElement("div");
-  div.className="produit";
-
-  div.innerHTML=`
-  <div class="img-container">
-  <img src="${p.image}" alt="${p.nom}">
-  </div>
-  <span>${p.nom}</span>
-
-  <div class="quantite-container">
-  <button type="button" class="moins">-</button>
-  <input type="number" min="0" value="0" class="quantite" data-nom="${p.nom}">
-  <button type="button" class="plus">+</button>
-  </div>
-  `;
-
-  produitsContainer.appendChild(div);
-
-  const input=div.querySelector(".quantite");
-
-  div.querySelector(".plus").addEventListener("click",()=>{
-    input.value=(parseInt(input.value)||0)+1;
+  chantiersBEClean.forEach(c=>{
+    const option=document.createElement("option");
+    option.value=c.nom;
+    option.textContent=c.nom;
+    chantierSelect.appendChild(option);
   });
 
-  div.querySelector(".moins").addEventListener("click",()=>{
-    input.value=Math.max(0,(parseInt(input.value)||0)-1);
-  });
+  produits.forEach(p=>{
+    const div=document.createElement("div");
+    div.className="produit";
 
-});
-
-document.getElementById("formCommande").addEventListener("submit",function(e){
-
-e.preventDefault();
-
-const societe="Bostanari Marianna";
-const chantier=escapeHTML(document.getElementById("chantier").value);
-const nom=escapeHTML(document.getElementById("nom").value);
-const autre=escapeHTML(document.getElementById("autre").value);
-
-const maintenant=new Date();
-const date=maintenant.toLocaleDateString("fr-BE");
-const heure=maintenant.toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"});
-
-let tableau=`<table style="width:100%;border-collapse:collapse;font-family:Arial;font-size:14px">
-<thead>
-<tr style="background:#1976d2;color:white">
-<th style="border:1px solid #ccc;padding:10px;text-align:left">Produit</th>
-<th style="border:1px solid #ccc;padding:10px;text-align:center;width:80px">Qté</th>
-</tr>
-</thead>
-<tbody>
-`;
-
-let ligne=0;
-
-document.querySelectorAll(".quantite").forEach(input=>{
-  if(Number(input.value)>0){
-    ligne++;
-    const couleur=ligne%2===0?"#bbdefb":"#ffffff";
-    tableau+=`
-    <tr style="background:${couleur}">
-    <td style="border:1px solid #ccc;padding:10px">${escapeHTML(input.dataset.nom)}</td>
-    <td style="border:1px solid #ccc;padding:10px;text-align:center;width:80px">${input.value}</td>
-    </tr>
+    div.innerHTML=`
+      <div class="img-container">
+        <img src="${p.image}" alt="${p.nom}">
+      </div>
+      <span>${p.nom}</span>
+      <div class="quantite-container">
+        <button type="button" class="moins">-</button>
+        <input type="number" min="0" value="0" class="quantite" data-nom="${p.nom}">
+        <button type="button" class="plus">+</button>
+      </div>
     `;
-  }
-});
 
-tableau+=`</tbody></table>`;
+    produitsContainer.appendChild(div);
 
-const messageHTML=`
-<div style="font-family:Arial">
-<table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-<tr>
-<td style="width:33%;text-align:left">
-<b>Société :</b> ${societe}<br>
-<b>Technicien :</b> ${nom}
-</td>
-<td style="width:33%;text-align:center">
-<div style="
-border:2px solid #4CAF50;
-border-radius:8px;
-padding:12px;
-background:#f7fff7;
-">
-<div style="font-size:14px;color:#666">CHANTIER</div>
-<div style="font-size:22px;font-weight:bold">
-${chantier}
-</div>
-</div>
-</td>
-<td style="width:33%;text-align:right">
-${date}<br>${heure}
-</td>
-</tr>
-</table>
+    const input=div.querySelector(".quantite");
 
-${tableau}
+    div.querySelector(".plus").addEventListener("click",()=>{
+      input.value=(parseInt(input.value)||0)+1;
+    });
 
-${autre?`<p><b>Autre demande :</b><br>${autre}</p>`:""}
-</div>
-`;
+    div.querySelector(".moins").addEventListener("click",()=>{
+      input.value=Math.max(0,(parseInt(input.value)||0)-1);
+    });
+  });
 
-emailjs.send("service_kt6gmbs","template_53rynh4",{
-societe,
-chantier,
-nom,
-commande:messageHTML
-}).then(()=>{
-  alert("Commande envoyée !");
-  document.getElementById("formCommande").reset();
-  document.querySelectorAll(".quantite").forEach(i=>i.value=0);
-});
+  document.getElementById("formCommande").addEventListener("submit",function(e){
 
-});
+    e.preventDefault();
+
+    const societe="Bostanari Marianna";
+    const chantier=escapeHTML(document.getElementById("chantier").value);
+    const nom=escapeHTML(document.getElementById("nom").value);
+    const autre=escapeHTML(document.getElementById("autre").value);
+
+    const maintenant=new Date();
+    const date=maintenant.toLocaleDateString("fr-BE");
+    const heure=maintenant.toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"});
+
+    let tableau=`<table style="width:100%;border-collapse:collapse;font-family:Arial;font-size:14px">
+      <thead>
+        <tr style="background:#1976d2;color:white">
+          <th style="border:1px solid #ccc;padding:10px;text-align:left">Produit</th>
+          <th style="border:1px solid #ccc;padding:10px;text-align:center;width:80px">Qté</th>
+        </tr>
+      </thead>
+      <tbody>
+    `;
+
+    let ligne=0;
+
+    document.querySelectorAll(".quantite").forEach(input=>{
+      if(Number(input.value)>0){
+        ligne++;
+        const couleur=ligne%2===0?"#bbdefb":"#ffffff";
+        tableau+=`
+          <tr style="background:${couleur}">
+            <td style="border:1px solid #ccc;padding:10px">${escapeHTML(input.dataset.nom)}</td>
+            <td style="border:1px solid #ccc;padding:10px;text-align:center;width:80px">${input.value}</td>
+          </tr>
+        `;
+      }
+    });
+
+    tableau+=`</tbody></table>`;
+
+    const messageHTML=`
+      <div style="font-family:Arial">
+        <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+          <tr>
+            <td style="width:33%;text-align:left">
+              <b>Société :</b> ${societe}<br>
+              <b>Technicien :</b> ${nom}
+            </td>
+            <td style="width:33%;text-align:center">
+              <div style="
+                border:2px solid #4CAF50;
+                border-radius:8px;
+                padding:12px;
+                background:#f7fff7;
+              ">
+                <div style="font-size:14px;color:#666">CHANTIER</div>
+                <div style="font-size:22px;font-weight:bold">${chantier}</div>
+              </div>
+            </td>
+            <td style="width:33%;text-align:right">
+              ${date}<br>${heure}
+            </td>
+          </tr>
+        </table>
+
+        ${tableau}
+
+        ${autre?`<p><b>Autre demande :</b><br>${autre}</p>`:""}
+      </div>
+    `;
+
+    emailjs.send("service_kt6gmbs","template_53rynh4",{
+      societe,
+      chantier,
+      nom,
+      commande:messageHTML
+    }).then(()=>{
+      alert("Commande envoyée !");
+      document.getElementById("formCommande").reset();
+      document.querySelectorAll(".quantite").forEach(i=>i.value=0);
+    });
+
+  });
 
 });
