@@ -9,7 +9,7 @@ function escapeHTML(str){
   });
 }
 
-const chantiersBEClean=[
+const chantiersBostanari=[
   {nom:"HYDROGEN",adresse:"avenue Marnix, 23   1000 Bruxelles"},
   
 ];
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const chantierSelect=document.getElementById("chantier");
   const produitsContainer=document.getElementById("produits");
 
-  chantiersBEClean.forEach(c=>{
+  chantiersBostanari.forEach(c=>{
     const option=document.createElement("option");
     option.value=c.nom;
     option.textContent=c.nom;
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded",()=>{
           <tr>
             <td style="width:33%;text-align:left">
               <b>Société :</b> ${societe}<br>
-              <b>Technicien :</b> ${nom}
+              <b>Demandeur :</b> ${nom}
             </td>
             <td style="width:33%;text-align:center">
               <div style="
@@ -141,12 +141,12 @@ document.addEventListener("DOMContentLoaded",()=>{
                 padding:12px;
                 background:#f7fff7;
               ">
-                <div style="font-size:14px;color:#666">CHANTIER</div>
+<div style="font-size:14px;color:#666">CHANTIER</div>
 <div style="font-size:18px;font-weight:bold;color:#000">
 ${chantier}
 </div>
 <div style="font-size:14px;color:#666;margin-top:4px">
-${chantiersBEClean.find(c=>c.nom===chantier)?.adresse || ""}
+${chantiersBostanari.find(c=>c.nom===chantier)?.adresse || ""}
 </div>
             </td>
             <td style="width:33%;text-align:right">
